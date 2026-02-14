@@ -15,6 +15,24 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
+    e.preventDefault();
+    const element = document.getElementById(id);
+    if (element) {
+      const offset = 80; // Account for navbar height
+      const bodyRect = document.body.getBoundingClientRect().top;
+      const elementRect = element.getBoundingClientRect().top;
+      const elementPosition = elementRect - bodyRect;
+      const offsetPosition = elementPosition - offset;
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: "smooth"
+      });
+      setIsOpen(false);
+    }
+  };
+
   return (
     <nav
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
@@ -34,12 +52,19 @@ export default function Navbar() {
             <a
               key={item}
               href={`#${item.toLowerCase()}`}
+              onClick={(e) => scrollToSection(e, item.toLowerCase())}
               className="text-sm uppercase tracking-widest text-white/80 hover:text-primary transition-colors font-medium"
             >
               {item}
             </a>
           ))}
-          <button className="px-6 py-2 border border-primary/30 text-primary hover:bg-primary hover:text-white transition-all duration-300 uppercase text-xs tracking-widest font-semibold">
+          <button 
+            onClick={() => {
+              const element = document.getElementById('contact');
+              if (element) element.scrollIntoView({ behavior: 'smooth' });
+            }}
+            className="px-6 py-2 border border-primary/30 text-primary hover:bg-primary hover:text-white transition-all duration-300 uppercase text-xs tracking-widest font-semibold"
+          >
             Book Consultation
           </button>
         </div>
@@ -67,13 +92,20 @@ export default function Navbar() {
                 <a
                   key={item}
                   href={`#${item.toLowerCase()}`}
-                  onClick={() => setIsOpen(false)}
+                  onClick={(e) => scrollToSection(e, item.toLowerCase())}
                   className="text-lg font-serif text-white hover:text-primary transition-colors"
                 >
                   {item}
                 </a>
               ))}
-              <button className="w-full py-3 bg-primary text-white uppercase tracking-widest text-xs font-bold">
+              <button 
+                onClick={() => {
+                  setIsOpen(false);
+                  const element = document.getElementById('contact');
+                  if (element) element.scrollIntoView({ behavior: 'smooth' });
+                }}
+                className="w-full py-3 bg-primary text-white uppercase tracking-widest text-xs font-bold"
+              >
                 Book Consultation
               </button>
             </div>

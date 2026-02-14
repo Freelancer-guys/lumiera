@@ -18,7 +18,7 @@ export default function Home() {
       <Testimonials />
       
       {/* Simple Footer for now */}
-      <footer className="bg-black py-16 border-t border-white/10">
+      <footer id="contact" className="bg-black py-16 border-t border-white/10">
         <div className="container mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-8">
           <div className="text-center md:text-left">
             <h2 className="text-2xl font-serif text-white mb-2">LUMIERA</h2>
