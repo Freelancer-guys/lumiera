@@ -2,17 +2,8 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X } from "lucide-react";
 
-export default function ContactPopup() {
-  const [isOpen, setIsOpen] = useState(false);
+export default function ContactPopup({ isOpen, setIsOpen }: { isOpen: boolean, setIsOpen: (open: boolean) => void }) {
   const [submitted, setSubmitted] = useState(false);
-
-  useEffect(() => {
-    // Show popup after 5 seconds
-    const timer = setTimeout(() => {
-      setIsOpen(true);
-    }, 5000);
-    return () => clearTimeout(timer);
-  }, []);
 
   if (!isOpen) return null;
 

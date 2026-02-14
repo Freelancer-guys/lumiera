@@ -31,10 +31,10 @@ export default function Hero() {
         </motion.span>
         
         <motion.h1 
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.7, duration: 0.8 }}
-          className="text-5xl md:text-7xl lg:text-8xl font-serif text-white leading-tight mb-8"
+          initial={{ opacity: 0, scale: 1.1, filter: "blur(10px)" }}
+          animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
+          transition={{ delay: 0.7, duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+          className="text-5xl md:text-7xl lg:text-9xl font-serif text-white leading-tight mb-8"
         >
           Crafting Timeless <br />
           <span className="italic text-white/90">Luxury Spaces</span>

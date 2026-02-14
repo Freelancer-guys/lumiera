@@ -3,7 +3,7 @@ import { Link } from "wouter";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
 
-export default function Navbar() {
+export default function Navbar({ onOpenContact }: { onOpenContact: () => void }) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
 
@@ -53,19 +53,18 @@ export default function Navbar() {
               key={item}
               href={`#${item.toLowerCase()}`}
               onClick={(e) => scrollToSection(e, item.toLowerCase())}
-              className="text-sm uppercase tracking-widest text-white/80 hover:text-primary transition-colors font-medium"
+              className="text-sm uppercase tracking-widest text-white/80 hover:text-primary transition-colors font-medium relative group overflow-hidden"
             >
               {item}
+              <span className="absolute bottom-0 left-0 w-full h-[1px] bg-primary translate-x-[-100%] group-hover:translate-x-0 transition-transform duration-500" />
             </a>
           ))}
           <button 
-            onClick={() => {
-              const element = document.getElementById('contact');
-              if (element) element.scrollIntoView({ behavior: 'smooth' });
-            }}
-            className="px-6 py-2 border border-primary/30 text-primary hover:bg-primary hover:text-white transition-all duration-300 uppercase text-xs tracking-widest font-semibold"
+            onClick={onOpenContact}
+            className="px-6 py-2 border border-primary/30 text-primary hover:bg-primary hover:text-white transition-all duration-300 uppercase text-xs tracking-widest font-semibold relative overflow-hidden group"
           >
-            Book Consultation
+            <span className="relative z-10">Book Consultation</span>
+            <span className="absolute inset-0 bg-primary translate-y-[100%] group-hover:translate-y-0 transition-transform duration-300" />
           </button>
         </div>
 
@@ -82,36 +81,49 @@ export default function Navbar() {
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            className="absolute top-full left-0 right-0 bg-background border-b border-white/10 md:hidden"
+            initial={{ opacity: 0, x: "100%" }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: "100%" }}
+            transition={{ type: "spring", damping: 25, stiffness: 200 }}
+            className="fixed inset-0 bg-background md:hidden flex items-center justify-center"
           >
-            <div className="flex flex-col p-8 space-y-6 items-center">
-              {["Projects", "Services", "Studio", "Journal"].map((item) => (
-                <a
+            <div className="flex flex-col p-8 space-y-12 items-center">
+              {["Projects", "Services", "Studio", "Journal"].map((item, i) => (
+                <motion.a
                   key={item}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: i * 0.1 }}
                   href={`#${item.toLowerCase()}`}
                   onClick={(e) => scrollToSection(e, item.toLowerCase())}
-                  className="text-lg font-serif text-white hover:text-primary transition-colors"
+                  className="text-4xl font-serif text-white hover:text-primary transition-colors italic"
                 >
                   {item}
-                </a>
+                </motion.a>
               ))}
-              <button 
+              <motion.button 
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.4 }}
                 onClick={() => {
                   setIsOpen(false);
-                  const element = document.getElementById('contact');
-                  if (element) element.scrollIntoView({ behavior: 'smooth' });
+                  onOpenContact();
                 }}
-                className="w-full py-3 bg-primary text-white uppercase tracking-widest text-xs font-bold"
+                className="w-full py-4 bg-primary text-white uppercase tracking-widest text-sm font-bold"
               >
                 Book Consultation
-              </button>
+              </motion.button>
             </div>
+            <button
+              className="absolute top-8 right-8 text-white"
+              onClick={() => setIsOpen(false)}
+            >
+              <X size={32} />
+            </button>
           </motion.div>
         )}
       </AnimatePresence>
     </nav>
   );
+}
 }

@@ -8,36 +8,64 @@ import ContactPopup from "@/components/home/ContactPopup";
 import { motion } from "framer-motion";
 
 export default function Home() {
+  const [isContactOpen, setIsContactOpen] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsContactOpen(true);
+    }, 5000);
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
     <main className="bg-background min-h-screen text-foreground selection:bg-primary/30">
-      <Navbar />
+      <Navbar onOpenContact={() => setIsContactOpen(true)} />
       <Hero />
       <ProjectShowcase />
-      <CaseStudy />
+      <section id="studio">
+        <CaseStudy />
+      </section>
       <WhyChooseUs />
-      <Testimonials />
+      <section id="journal">
+        <Testimonials />
+      </section>
       
       {/* Simple Footer for now */}
-      <footer id="contact" className="bg-black py-16 border-t border-white/10">
-        <div className="container mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-8">
+      <footer id="contact" className="bg-black py-32 border-t border-white/10 relative overflow-hidden">
+        <motion.div 
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--color-primary)_0%,_transparent_70%)] opacity-[0.03]" 
+        />
+        <div className="container mx-auto px-6 relative z-10 flex flex-col md:flex-row justify-between items-center gap-16">
           <div className="text-center md:text-left">
-            <h2 className="text-2xl font-serif text-white mb-2">LUMIERA</h2>
-            <p className="text-white/30 text-xs uppercase tracking-widest">Timeless Luxury Interiors</p>
+            <h2 className="text-5xl md:text-7xl font-serif text-white mb-4">LUMIERA</h2>
+            <p className="text-primary uppercase tracking-[0.5em] text-xs">Architectural Poetics</p>
           </div>
           
-          <div className="flex justify-center gap-8">
-            <a href="#" className="text-muted-foreground hover:text-primary transition-colors text-xs uppercase tracking-wider">Instagram</a>
-            <a href="#" className="text-muted-foreground hover:text-primary transition-colors text-xs uppercase tracking-wider">Pinterest</a>
-            <a href="#" className="text-muted-foreground hover:text-primary transition-colors text-xs uppercase tracking-wider">LinkedIn</a>
-          </div>
-          
-          <div className="text-white/30 text-xs">
-            © 2024 Lumiera Interiors.
+          <div className="flex flex-col items-center md:items-end gap-8">
+            <div className="flex gap-12">
+              <a href="#" className="group relative overflow-hidden text-xs uppercase tracking-widest text-white/50 hover:text-white transition-colors">
+                Instagram
+                <span className="absolute bottom-0 left-0 w-full h-[1px] bg-primary translate-x-[-101%] group-hover:translate-x-0 transition-transform duration-500" />
+              </a>
+              <a href="#" className="group relative overflow-hidden text-xs uppercase tracking-widest text-white/50 hover:text-white transition-colors">
+                Pinterest
+                <span className="absolute bottom-0 left-0 w-full h-[1px] bg-primary translate-x-[-101%] group-hover:translate-x-0 transition-transform duration-500" />
+              </a>
+              <a href="#" className="group relative overflow-hidden text-xs uppercase tracking-widest text-white/50 hover:text-white transition-colors">
+                LinkedIn
+                <span className="absolute bottom-0 left-0 w-full h-[1px] bg-primary translate-x-[-101%] group-hover:translate-x-0 transition-transform duration-500" />
+              </a>
+            </div>
+            <div className="text-white/20 text-[10px] uppercase tracking-[0.2em]">
+              © 2024 Lumiera Studio. Crafted for Excellence.
+            </div>
           </div>
         </div>
       </footer>
 
-      <ContactPopup />
+      <ContactPopup isOpen={isContactOpen} setIsOpen={setIsContactOpen} />
     </main>
   );
 }
