@@ -126,4 +126,3 @@ export default function Navbar({ onOpenContact }: { onOpenContact: () => void })
     </nav>
   );
 }
-}
