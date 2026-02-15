@@ -46,13 +46,15 @@ export default function WhyChooseUs() {
             {reasons.map((reason, index) => (
               <motion.div 
                 key={index}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1, duration: 0.5 }}
-                viewport={{ once: true }}
-                className="p-8 border border-white/5 hover:border-primary/30 hover:bg-white/5 transition-all duration-300 group"
+                initial={{ opacity: 0, y: 30, scale: 0.95 }}
+                whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                whileHover={{ y: -10, transition: { duration: 0.3 } }}
+                transition={{ delay: index * 0.1, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+                viewport={{ once: true, margin: "-100px" }}
+                className="p-8 border border-white/5 hover:border-primary/30 bg-white/[0.02] hover:bg-white/[0.05] transition-all duration-500 group relative overflow-hidden"
               >
-                <reason.icon className="w-8 h-8 text-primary mb-6 group-hover:scale-110 transition-transform duration-300" />
+                <div className="absolute top-0 left-0 w-1 h-0 bg-primary group-hover:h-full transition-all duration-500" />
+                <reason.icon className="w-8 h-8 text-primary mb-6 group-hover:scale-110 transition-transform duration-500" />
                 <h3 className="text-xl font-serif text-white mb-4">{reason.title}</h3>
                 <p className="text-muted-foreground text-sm leading-relaxed">
                   {reason.description}

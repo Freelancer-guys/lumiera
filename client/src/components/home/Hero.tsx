@@ -44,16 +44,24 @@ export default function Hero() {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.9, duration: 0.8 }}
-          className="flex flex-col md:flex-row items-center justify-center gap-6"
+          className="flex flex-col sm:flex-row items-center justify-center gap-6"
         >
-          <button className="group px-8 py-4 bg-white text-black hover:bg-primary hover:text-white transition-all duration-300 uppercase tracking-widest text-xs font-bold flex items-center gap-2">
+          <motion.button 
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.98 }}
+            className="group w-full sm:w-auto px-8 py-4 bg-white text-black hover:bg-primary hover:text-white transition-all duration-300 uppercase tracking-widest text-xs font-bold flex items-center justify-center gap-2"
+          >
             View Projects
             <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
-          </button>
+          </motion.button>
           
-          <button className="px-8 py-4 border border-white/30 text-white hover:border-white transition-all duration-300 uppercase tracking-widest text-xs font-bold">
+          <motion.button 
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.98 }}
+            className="w-full sm:w-auto px-8 py-4 border border-white/30 text-white hover:border-white transition-all duration-300 uppercase tracking-widest text-xs font-bold"
+          >
             Book Consultation
-          </button>
+          </motion.button>
         </motion.div>
       </div>
 

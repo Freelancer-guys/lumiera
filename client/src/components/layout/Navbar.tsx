@@ -84,19 +84,19 @@ export default function Navbar({ onOpenContact }: { onOpenContact: () => void })
             initial={{ opacity: 0, x: "100%" }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: "100%" }}
-            transition={{ type: "spring", damping: 25, stiffness: 200 }}
-            className="fixed inset-0 bg-background md:hidden flex items-center justify-center"
+            transition={{ type: "spring", damping: 30, stiffness: 300 }}
+            className="fixed inset-0 bg-background/95 backdrop-blur-xl md:hidden flex items-center justify-center z-[60]"
           >
-            <div className="flex flex-col p-8 space-y-12 items-center">
+            <div className="flex flex-col p-8 space-y-8 items-center w-full">
               {["Projects", "Services", "Studio", "Journal"].map((item, i) => (
                 <motion.a
                   key={item}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: i * 0.1 }}
+                  transition={{ delay: i * 0.1, duration: 0.5 }}
                   href={`#${item.toLowerCase()}`}
                   onClick={(e) => scrollToSection(e, item.toLowerCase())}
-                  className="text-4xl font-serif text-white hover:text-primary transition-colors italic"
+                  className="text-3xl font-serif text-white hover:text-primary transition-colors italic tracking-wide"
                 >
                   {item}
                 </motion.a>
@@ -104,21 +104,21 @@ export default function Navbar({ onOpenContact }: { onOpenContact: () => void })
               <motion.button 
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.4 }}
+                transition={{ delay: 0.5, duration: 0.5 }}
                 onClick={() => {
                   setIsOpen(false);
                   onOpenContact();
                 }}
-                className="w-full py-4 bg-primary text-white uppercase tracking-widest text-sm font-bold"
+                className="w-full max-w-xs py-4 bg-primary text-white uppercase tracking-widest text-xs font-bold mt-4"
               >
                 Book Consultation
               </motion.button>
             </div>
             <button
-              className="absolute top-8 right-8 text-white"
+              className="absolute top-8 right-8 text-white p-2"
               onClick={() => setIsOpen(false)}
             >
-              <X size={32} />
+              <X size={28} />
             </button>
           </motion.div>
         )}
