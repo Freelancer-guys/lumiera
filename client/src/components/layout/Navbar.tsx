@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { Link } from "wouter";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
 
@@ -14,6 +13,17 @@ export default function Navbar({ onOpenContact }: { onOpenContact: () => void })
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, [isOpen]);
 
   const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
     e.preventDefault();
@@ -40,11 +50,17 @@ export default function Navbar({ onOpenContact }: { onOpenContact: () => void })
       }`}
     >
       <div className="container mx-auto px-6 flex justify-between items-center">
-        <Link href="/">
-          <span className="cursor-pointer text-2xl font-serif font-bold tracking-widest text-white hover:opacity-80 transition-opacity">
-            LUMIERA
-          </span>
-        </Link>
+        <button
+          onClick={() => {
+            const element = document.getElementById("hero");
+            if (element) {
+              element.scrollIntoView({ behavior: "smooth" });
+            }
+          }}
+          className="cursor-pointer text-2xl font-serif font-bold tracking-widest text-white hover:opacity-80 transition-opacity"
+        >
+          LUMIERA
+        </button>
 
         {/* Desktop Menu */}
         <div className="hidden md:flex items-center space-x-12">
@@ -85,37 +101,39 @@ export default function Navbar({ onOpenContact }: { onOpenContact: () => void })
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: "100%" }}
             transition={{ type: "spring", damping: 30, stiffness: 300 }}
-            className="fixed inset-0 bg-background/95 backdrop-blur-xl md:hidden flex items-center justify-center z-[60]"
+            className="fixed top-0 left-0 right-0 bottom-0 bg-black z-[60] w-screen h-screen overflow-hidden"
           >
-            <div className="flex flex-col p-8 space-y-8 items-center w-full">
-              {["Projects", "Services", "Studio", "Journal"].map((item, i) => (
-                <motion.a
-                  key={item}
+            <div className="w-full h-full flex flex-col items-center justify-start overflow-y-auto">
+              <div className="w-full flex flex-col space-y-10 items-center px-8 py-20">
+                {["Projects", "Services", "Studio", "Journal"].map((item, i) => (
+                  <motion.a
+                    key={item}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: i * 0.1, duration: 0.5 }}
+                    href={`#${item.toLowerCase()}`}
+                    onClick={(e) => scrollToSection(e, item.toLowerCase())}
+                    className="text-4xl font-serif text-white hover:text-primary transition-colors italic tracking-wide text-center"
+                  >
+                    {item}
+                  </motion.a>
+                ))}
+                <motion.button 
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: i * 0.1, duration: 0.5 }}
-                  href={`#${item.toLowerCase()}`}
-                  onClick={(e) => scrollToSection(e, item.toLowerCase())}
-                  className="text-3xl font-serif text-white hover:text-primary transition-colors italic tracking-wide"
+                  transition={{ delay: 0.5, duration: 0.5 }}
+                  onClick={() => {
+                    setIsOpen(false);
+                    onOpenContact();
+                  }}
+                  className="w-full max-w-xs py-4 bg-primary text-white uppercase tracking-widest text-xs font-bold mt-8"
                 >
-                  {item}
-                </motion.a>
-              ))}
-              <motion.button 
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.5, duration: 0.5 }}
-                onClick={() => {
-                  setIsOpen(false);
-                  onOpenContact();
-                }}
-                className="w-full max-w-xs py-4 bg-primary text-white uppercase tracking-widest text-xs font-bold mt-4"
-              >
-                Book Consultation
-              </motion.button>
+                  Book Consultation
+                </motion.button>
+              </div>
             </div>
             <button
-              className="absolute top-8 right-8 text-white p-2"
+              className="fixed top-8 right-8 text-white p-2 z-[70]"
               onClick={() => setIsOpen(false)}
             >
               <X size={28} />

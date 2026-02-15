@@ -1,9 +1,16 @@
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 
-export default function Hero() {
+export default function Hero({ onOpenContact }: { onOpenContact: () => void }) {
+  const scrollToProjects = () => {
+    const element = document.getElementById("projects");
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
   return (
-    <section className="relative h-screen w-full overflow-hidden flex items-center justify-center">
+    <section id="hero" className="relative h-screen w-full overflow-hidden flex items-center justify-center">
       {/* Background with Parallax-like scale effect on load */}
       <motion.div 
         initial={{ scale: 1.1 }}
@@ -47,6 +54,7 @@ export default function Hero() {
           className="flex flex-col sm:flex-row items-center justify-center gap-6"
         >
           <motion.button 
+            onClick={scrollToProjects}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.98 }}
             className="group w-full sm:w-auto px-8 py-4 bg-white text-black hover:bg-primary hover:text-white transition-all duration-300 uppercase tracking-widest text-xs font-bold flex items-center justify-center gap-2"
@@ -56,6 +64,7 @@ export default function Hero() {
           </motion.button>
           
           <motion.button 
+            onClick={onOpenContact}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.98 }}
             className="w-full sm:w-auto px-8 py-4 border border-white/30 text-white hover:border-white transition-all duration-300 uppercase tracking-widest text-xs font-bold"

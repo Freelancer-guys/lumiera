@@ -1,11 +1,16 @@
 import { useState, useEffect } from "react";
 import Navbar from "@/components/layout/Navbar";
 import Hero from "@/components/home/Hero";
+import BeforeAfterGallery from "@/components/home/BeforeAfterGallery";
+import DesignStyleQuiz from "@/components/home/DesignStyleQuiz";
+import ProcessTimeline from "@/components/home/ProcessTimeline";
+import DesignInspirations from "@/components/home/DesignInspirations";
 import ProjectShowcase from "@/components/home/ProjectShowcase";
 import WhyChooseUs from "@/components/home/WhyChooseUs";
 import CaseStudy from "@/components/home/CaseStudy";
 import Testimonials from "@/components/home/Testimonials";
 import ContactPopup from "@/components/home/ContactPopup";
+import AIChat from "@/components/home/AIChat";
 import { motion } from "framer-motion";
 
 export default function Home() {
@@ -21,8 +26,14 @@ export default function Home() {
   return (
     <main className="bg-background min-h-screen text-foreground selection:bg-primary/30">
       <Navbar onOpenContact={() => setIsContactOpen(true)} />
-      <Hero />
-      <ProjectShowcase />
+      <Hero onOpenContact={() => setIsContactOpen(true)} />
+      <BeforeAfterGallery />
+      <DesignStyleQuiz />
+      <ProcessTimeline />
+      <DesignInspirations />
+      <section id="projects">
+        <ProjectShowcase />
+      </section>
       <section id="studio">
         <CaseStudy />
       </section>
@@ -67,6 +78,7 @@ export default function Home() {
       </footer>
 
       <ContactPopup isOpen={isContactOpen} setIsOpen={setIsContactOpen} />
+      <AIChat />
     </main>
   );
 }
