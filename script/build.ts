@@ -1,5 +1,5 @@
 import { build as esbuild } from "esbuild";
-import { build as viteBuild, loadConfigFromFile } from "vite";
+import { build as viteBuild } from "vite";
 import { rm, readFile } from "fs/promises";
 import { fileURLToPath } from "url";
 import { dirname, resolve } from "path";
@@ -39,22 +39,13 @@ const allowlist = [
 ];
 
 async function buildAll() {
+  process.chdir(projectRoot);
+  
   await rm(resolve(projectRoot, "dist"), { recursive: true, force: true });
 
   console.log("building client...");
-  // Load vite config explicitly
-  const configFile = resolve(projectRoot, "vite.config.ts");
-  const viteConfig = await loadConfigFromFile(
-    { command: "build", mode: "production" },
-    configFile,
-    projectRoot,
-  );
-
-  if (viteConfig) {
-    await viteBuild(viteConfig.config);
-  } else {
-    await viteBuild();
-  }
+  // Vite will automatically load vite.config.ts from the current directory
+  await viteBuild();
 
   console.log("building server...");
   const pkg = JSON.parse(
