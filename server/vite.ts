@@ -1,14 +1,38 @@
 import { type Express } from "express";
-import { createServer as createViteServer, createLogger } from "vite";
+import { createServer as createViteServer, createLogger, type UserConfig } from "vite";
 import { type Server } from "http";
-import viteConfig from "../vite.config";
 import fs from "fs";
 import path from "path";
 import { nanoid } from "nanoid";
+import { fileURLToPath } from "url";
+import { dirname, resolve } from "path";
 
+const __dirname = dirname(fileURLToPath(import.meta.url));
 const viteLogger = createLogger();
 
 export async function setupVite(server: Server, app: Express) {
+  // Build vite config inline instead of importing from vite.config
+  const projectRoot = resolve(__dirname, "..");
+  const viteConfig: UserConfig = {
+    root: resolve(projectRoot, "client"),
+    plugins: [
+      (await import("@vitejs/plugin-react")).default(),
+      (await import("@tailwindcss/vite")).default(),
+    ],
+    resolve: {
+      alias: {
+        "@": resolve(projectRoot, "client", "src"),
+        "@shared": resolve(projectRoot, "shared"),
+        "@assets": resolve(projectRoot, "attached_assets"),
+      },
+    },
+    css: {
+      postcss: {
+        plugins: [],
+      },
+    },
+  };
+
   const serverOptions = {
     middlewareMode: true,
     hmr: { server, path: "/vite-hmr" },
