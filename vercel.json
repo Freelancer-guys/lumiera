@@ -3,8 +3,12 @@
   "env": {
     "NODE_ENV": "production"
   },
+  "functions": {
+    "dist/index.cjs": {
+      "runtime": "nodejs20.x"
+    }
+  },
   "routes": [
-    { "src": "/api/(.*)", "dest": "/api/$1" },
-    { "src": "/(.*)", "dest": "/dist/public/index.html" }
+    { "src": "/(.*)", "dest": "/dist/index.cjs" }
   ]
 }
