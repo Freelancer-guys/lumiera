@@ -1,17 +1,6 @@
 {
   "buildCommand": "npm run build",
-  "outputDirectory": "dist",
   "env": {
     "NODE_ENV": "production"
-  },
-  "rewrites": [
-    {
-      "source": "/api/:path*",
-      "destination": "/api/:path*"
-    },
-    {
-      "source": "/:path*",
-      "destination": "/dist/public/index.html"
-    }
-  ]
+  }
 }
