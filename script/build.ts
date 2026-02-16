@@ -42,13 +42,8 @@ async function buildAll() {
   await rm(resolve(projectRoot, "dist"), { recursive: true, force: true });
 
   console.log("building client...");
-  await viteBuild({
-    root: resolve(projectRoot, "client"),
-    build: {
-      outDir: resolve(projectRoot, "dist/public"),
-      emptyOutDir: true,
-    },
-  });
+  // Use default vite config from vite.config.ts
+  await viteBuild();
 
   console.log("building server...");
   const pkg = JSON.parse(
