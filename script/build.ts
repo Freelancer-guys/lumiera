@@ -1,5 +1,5 @@
 import { build as esbuild } from "esbuild";
-import { build as viteBuild } from "vite";
+import { build as viteBuild, UserConfig } from "vite";
 import { rm, readFile } from "fs/promises";
 import { fileURLToPath } from "url";
 import { dirname, resolve } from "path";
@@ -43,17 +43,34 @@ async function buildAll() {
   await rm(resolve(projectRoot, "dist"), { recursive: true, force: true });
 
   console.log("building client...");
-  // Save original cwd and change to project root
-  const originalCwd = process.cwd();
-  process.chdir(projectRoot);
   
-  try {
-    // Vite will automatically find and load vite.config.ts from current directory
-    await viteBuild();
-  } finally {
-    // Restore original cwd
-    process.chdir(originalCwd);
-  }
+  // Build Vite config inline to avoid path resolution issues
+  const viteConfig: UserConfig = {
+    configFile: false, // Don't auto-load config file
+    root: resolve(projectRoot, "client"),
+    plugins: [
+      (await import("@vitejs/plugin-react")).default(),
+      (await import("@tailwindcss/vite")).default(),
+    ],
+    resolve: {
+      alias: {
+        "@": resolve(projectRoot, "client", "src"),
+        "@shared": resolve(projectRoot, "shared"),
+        "@assets": resolve(projectRoot, "attached_assets"),
+      },
+    },
+    css: {
+      postcss: {
+        plugins: [],
+      },
+    },
+    build: {
+      outDir: resolve(projectRoot, "dist/public"),
+      emptyOutDir: true,
+    },
+  };
+
+  await viteBuild(viteConfig);
 
   console.log("building server...");
   const pkg = JSON.parse(
