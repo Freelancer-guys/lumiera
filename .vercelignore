@@ -2,12 +2,12 @@ node_modules
 dist
 .git
 .env.local
-.env.*.local
-*.md
+.env._.local
+_.md
 .gitignore
 .eslintignore
 eslint.config.js
-tsconfig.*.json
+tsconfig.\*.json
 vite.config.ts
 postcss.config.js
 tailwind.config.ts
