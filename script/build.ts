@@ -39,13 +39,18 @@ const allowlist = [
 ];
 
 async function buildAll() {
-  process.chdir(projectRoot);
-  
   await rm(resolve(projectRoot, "dist"), { recursive: true, force: true });
 
   console.log("building client...");
-  // Vite will automatically load vite.config.ts from the current directory
-  await viteBuild();
+  // Change to project root so Vite finds vite.config.ts
+  const originalCwd = process.cwd();
+  process.chdir(projectRoot);
+  
+  try {
+    await viteBuild();
+  } finally {
+    process.chdir(originalCwd);
+  }
 
   console.log("building server...");
   const pkg = JSON.parse(
