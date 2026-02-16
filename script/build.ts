@@ -1,5 +1,5 @@
 import { build as esbuild } from "esbuild";
-import { build as viteBuild } from "vite";
+import { build as viteBuild, loadConfigFromFile } from "vite";
 import { rm, readFile } from "fs/promises";
 import { fileURLToPath } from "url";
 import { dirname, resolve } from "path";
@@ -42,8 +42,44 @@ async function buildAll() {
   await rm(resolve(projectRoot, "dist"), { recursive: true, force: true });
 
   console.log("building client...");
-  // Use default vite config from vite.config.ts
-  await viteBuild();
+  // Load vite config explicitly
+  const configFile = resolve(projectRoot, "vite.config.ts");
+  const viteConfig = await loadConfigFromFile(
+    { command: "build", mode: "production" },
+    configFile,
+    projectRoot,
+  );
+
+  if (viteConfig) {
+    await viteBuild(viteConfig.config);
+  } else {
+    await viteBuild();
+  }
+
+  console.log("building server...");
+  const pkg = JSON.parse(
+    await readFile(resolve(projectRoot, "package.json"), "utf-8"),
+  );
+  const allDeps = [
+    ...Object.keys(pkg.dependencies || {}),
+    ...Object.keys(pkg.devDependencies || {}),
+  ];
+  const externals = allDeps.filter((dep) => !allowlist.includes(dep));
+
+  await esbuild({
+    entryPoints: [resolve(projectRoot, "server/index.ts")],
+    platform: "node",
+    bundle: true,
+    format: "cjs",
+    outfile: resolve(projectRoot, "dist/index.cjs"),
+    define: {
+      "process.env.NODE_ENV": '"production"',
+    },
+    minify: true,
+    external: externals,
+    logLevel: "info",
+  });
+}
 
   console.log("building server...");
   const pkg = JSON.parse(
