@@ -81,31 +81,6 @@ async function buildAll() {
   });
 }
 
-  console.log("building server...");
-  const pkg = JSON.parse(
-    await readFile(resolve(projectRoot, "package.json"), "utf-8"),
-  );
-  const allDeps = [
-    ...Object.keys(pkg.dependencies || {}),
-    ...Object.keys(pkg.devDependencies || {}),
-  ];
-  const externals = allDeps.filter((dep) => !allowlist.includes(dep));
-
-  await esbuild({
-    entryPoints: [resolve(projectRoot, "server/index.ts")],
-    platform: "node",
-    bundle: true,
-    format: "cjs",
-    outfile: resolve(projectRoot, "dist/index.cjs"),
-    define: {
-      "process.env.NODE_ENV": '"production"',
-    },
-    minify: true,
-    external: externals,
-    logLevel: "info",
-  });
-}
-
 buildAll().catch((err) => {
   console.error(err);
   process.exit(1);
