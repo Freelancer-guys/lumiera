@@ -39,16 +39,19 @@ const allowlist = [
 ];
 
 async function buildAll() {
+  // Remove old dist
   await rm(resolve(projectRoot, "dist"), { recursive: true, force: true });
 
   console.log("building client...");
-  // Change to project root so Vite finds vite.config.ts
+  // Save original cwd and change to project root
   const originalCwd = process.cwd();
   process.chdir(projectRoot);
   
   try {
+    // Vite will automatically find and load vite.config.ts from current directory
     await viteBuild();
   } finally {
+    // Restore original cwd
     process.chdir(originalCwd);
   }
 
